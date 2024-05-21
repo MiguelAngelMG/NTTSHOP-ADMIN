@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "Prodcutos";
+}
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.ProductViewModel
+
+<h1>Productos</h1>
+@if (ViewBag.ErrorMessageProduct != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessageProduct
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Productos</h2>
+        <ul>
+            @foreach (var product in Model.productsList)
+            {
+                <li onclick="location.href='@Url.Action("EditarProductos", "Productos", new { id = product.idProduct })'">
+                    @product.idProduct - unidades: @product.stock - disponible: @product.enabled - @product.description[0].title - @product.description[0].description - precio: @product.rates[0].price €
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager((IPagedList)Model.productsList, pageProduct => Url.Action("Productos", new { pageProduct }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+    @using (Html.BeginForm("GuardarProducto", "Productos", FormMethod.Post))
+    {
+        <div class="col-md-6">
+            <h2>Editar Language</h2>
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">IdProduct</label>
+                    <div class="col-md-10">
+                        <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.product.idProduct.ToString()) ? Model.product.idProduct.ToString() : string.Empty)" class="form-control" placeholder="IdProduct">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Stock</label>
+                    <div class="col-md-10">
+                        <input name="txtStock" type="number" min="0" value="@(!string.IsNullOrEmpty(Model.product.stock.ToString()) ? Model.product.stock.ToString() : string.Empty)" class="form-control" placeholder="Stock">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Disponible</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtDisponible", new SelectList(new[]
+                         {
+                             new { Value = true, Text = "Verdadero" },
+                             new { Value = false, Text = "Falso" }
+                         }, "Value", "Text", Model.product.enabled), new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Titulo</label>
+                    <div class="col-md-10">
+                        @{
+                            string titleActual = string.Empty;
+                            if (Model.product != null && Model.product.description != null && Model.product.description.Count > 0)
+                            {
+                                var title = Model.product.description[0]?.title;
+                                if (!string.IsNullOrEmpty(title))
+                                {
+                                    titleActual = title;
+                                }
+                            }
+                        }
+                        <input name="txtTitle" readonly type="text" value="@titleActual" class="form-control" placeholder="Titulo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Descripción</label>
+                    <div class="col-md-10">
+                        @{
+                            string descriptionActual = string.Empty;
+                            if (Model.product != null && Model.product.description != null && Model.product.description.Count > 0)
+                            {
+                                var description = Model.product.description[0]?.description;
+                                if (!string.IsNullOrEmpty(description))
+                                {
+                                    descriptionActual = description;
+                                }
+                            }
+                        }
+                        <input name="txtDescripcion" readonly type="text" value="@descriptionActual" class="form-control" placeholder="Descripcion">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Precio</label>
+                    <div class="col-md-10">
+                        @{
+                            string priceActual = string.Empty;
+                            if (Model.product != null && Model.product.rates != null && Model.product.rates.Count > 0)
+                            {
+                                var price = Model.product.rates[0]?.price.ToString();
+                                if (!string.IsNullOrEmpty(price))
+                                {
+                                    priceActual = price;
+                                }
+                            }
+                        }
+                        <input name="txtPrecio" readonly type="text" value="@priceActual" class="form-control" placeholder="Precio">
+                    </div>
+                </div>
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Añadir" class="btn btn-default">Añadir</button>
+                    <button type="submit" name="action" value="Guardar" class="btn btn-default">Editar</button>
+                    <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                </div>
+
+
+            </div>
+        </div>
+    }
+</div>
+@if (ViewBag.ErrorMessageDescription != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessageDescription
+    </div>
+}
+@if (Model.product.description.Count > 0 && Model.product.description != null)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Descripciones</h2>
+            <ul>
+                @foreach (var description in Model.descriptionsList)
+                {
+                    <li onclick="location.href='@Url.Action("EditarDescripciones", "Productos", new { id = description.idProduct , description = description.idProductDescription })'">
+                        @description.idProductDescription -  @description.language - @description.title - @description.description
+                    </li>
+                }
+            </ul>
+            @Html.PagedListPager((IPagedList)Model.descriptionsList, pageDescription => Url.Action("Productos", new { pageDescription }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        </div>
+        @using (Html.BeginForm("GuardarDescription", "Productos", FormMethod.Post))
+        {
+            <div class="col-md-6">
+                <h2>Editar Language</h2>
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">IdDescripción</label>
+                        <div class="col-md-10">
+                            <input name="txtIdDescription" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProductDescription.ToString()) ? Model.productDescription.idProductDescription.ToString() : string.Empty)" class="form-control" placeholder="Id Descripción">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">IdProduct</label>
+                        <div class="col-md-10">
+                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProduct.ToString()) ? Model.productDescription.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Languaje</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("txtLanguage", new SelectList(Model.languagesList, "iso", "descripcion", Model.productDescription.language), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Titulo</label>
+                        <div class="col-md-10">
+                            <input name="txtTitle" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.title) ? Model.productDescription.title : string.Empty)" class="form-control" placeholder="Titulo">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Descripción</label>
+                        <div class="col-md-10">
+                            <input name="txtDescription" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.description) ? Model.productDescription.description : string.Empty)" class="form-control" placeholder="Descripción">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" name="action" value="Añadir" class="btn btn-default">Añadir</button>
+                        <button type="submit" name="action" value="Guardar" class="btn btn-default">Editar</button>
+                        <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+    </div>
+}@if (ViewBag.ErrorMessageRate != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessageRate
+    </div>
+}
+@if (Model.product.rates.Count > 0 && Model.product.rates != null)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Tarifas</h2>
+            <ul>
+                @foreach (var description in Model.ratesList)
+                {
+                    <li onclick="location.href='@Url.Action("EditarRate", "Productos", new { id = description.idProduct, rate = description.idRate })'">
+                        Id Rate: @description.idRate - Id Product: @description.idProduct - Precio: @description.price €
+                    </li>
+                }
+            </ul>
+            @Html.PagedListPager((IPagedList)Model.descriptionsList, pageRates => Url.Action("Productos", new { pageRates }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        </div>
+        @using (Html.BeginForm("GuardarRate", "Productos", FormMethod.Post))
+        {
+            <div class="col-md-6">
+                <h2>Editar Precios</h2>
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Id Rate</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("txtIdRate", new SelectList(Model.allRates, "idRate", "idRate", Model.productRates.idRate), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Id Producto</label>
+                        <div class="col-md-10">
+                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productRates.idProduct.ToString()) ? Model.productRates.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Precio</label>
+                        <div class="col-md-10">
+                            <input name="txtPrecie" type="number" value="@(!string.IsNullOrEmpty(Model.productRates.price.ToString()) ? Model.productRates.price.ToString(): string.Empty)" class="form-control" min="0" placeholder="Precio">
+                        </div>
+                    </div>
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" name="action" value="Añadir" class="btn btn-default">Añadir</button>
+                        <button type="submit" name="action" value="Guardar" class="btn btn-default">Editar</button>
+                        <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+    </div>
+}

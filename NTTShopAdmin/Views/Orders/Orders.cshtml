@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Pedidos";
+}
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.OrdersViewModel
+
+
+
+@if (ViewBag.ErrorMessageProduct != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessageProduct
+    </div>
+}
+<br />
+<br />
+<div>
+    @using (Html.BeginForm("Buscar", "Orders", FormMethod.Post))
+    {
+        <label></label>
+        <div >
+            <label class="control-label col-md-2">Estado</label>
+            @Html.DropDownList("txtEstado", new SelectList(Model.searchOrderStatus, "idStatus", "description"), new { @class = "form-control" })
+            <label class="control-label col-md-2">Hasta</label>
+            <input name="hastaDateinput" type="date" value="" class="form-control">
+            <label class="control-label col-md-2">Desde</label>
+            <input name="desdeDateInput" type="date" value="" class="form-control">
+            <label class="control-label col-md-2">Cliente</label>
+            <input name="txtnombre" type="text" value="" class="form-control" placeholder="Nombre del cliente">
+            <button type="submit" name="action" value="Buscar" class="btn btn-default">Buscar</button>
+            <button type="submit" name="action" value="Resetear" class="btn btn-default">Resetear</button>
+        </div>
+    }
+</div>
+
+
+
+
+
+<div class="row">
+    <div>
+        <h2>Pedidos</h2>
+        <ul>
+            @foreach (var order in Model.orderPaged)
+            {
+
+                <li onclick="location.href='@Url.Action("EditarOrder", "Orders", new { id = order.idOrder })'">
+                    Pedido: @order.idOrder - Fecha : @order.orderDate - Cliente: @order.userName()  -Total: @order.TotalPrice € - Estado: @order.status.description
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager((IPagedList)Model.orderPaged, pageOrder => Url.Action("Orders", new { pageOrder }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+</div>
+@if (ViewBag.ErrorMessageDescription != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessageDescription
+    </div>
+}
+@if (Model.orderDetailPaged.Count > 0 && Model.orderDetailPaged != null)
+{
+    using (Html.BeginForm("GuardarOrder", "Orders", FormMethod.Post))
+    {
+        <div>
+            <h2>Detalles de pedido</h2>
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" class="form-control" placeholder="Id Order">Id Order</label>
+                    <div class="col-md-10">
+                        <input name="txtIdOrder" readonly type="text" value="@(!string.IsNullOrEmpty(Model.order.idOrder.ToString()) ? Model.order.idOrder.ToString() : string.Empty)" class="form-control" placeholder="Id Order">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Fecha de pedido</label>
+                    <div class="col-md-10">
+                        <input name="txtDateOrder" readonly type="text" value="@(!string.IsNullOrEmpty(Model.order.orderDate.ToString()) ? Model.order.orderDate.ToString() : string.Empty)" class="form-control" placeholder="Id Product">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Cliente</label>
+                    <div class="col-md-10">
+                        <input name="txtTitle" readonly type="text" value="@(!string.IsNullOrEmpty(Model.user.Name) ? Model.user.Name + Model.user.Surname1 + " " + Model.user.Surname2 : string.Empty)" class="form-control" placeholder="Titulo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Total pedido: </label>
+                    <div class="col-md-10">
+                        <input name="txtDescription" readonly type="text" value="@(!string.IsNullOrEmpty(Model.order.TotalPrice.ToString()) ? Model.order.TotalPrice.ToString() : string.Empty)" class="form-control" placeholder="Descripción">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Cliente</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtLanguage", new SelectList(Model.allOrderStatus, "idStatus", "description", Model.order.status.idStatus), new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Editar" class="btn btn-default">Editar</button>
+                    <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                </div>
+
+
+            </div>
+        </div>
+    }
+    <br />
+    <div>
+        <h2>Productos</h2>
+        <ul>
+            @foreach (var detail in Model.orderDetailPaged)
+            {
+                <li onclick="location.href='@Url.Action("EditarOrdeDetail", "Orders", new { id = detail.idProduct})'">
+                    Id producto:  @detail.idProduct - @detail.product.description[0].title -  unidades: @detail.Units -  total: @detail.Price €
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager((IPagedList)Model.orderDetailPaged, pageDetail => Url.Action("Orders", new { pageDetail }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+    </div>
+
+}

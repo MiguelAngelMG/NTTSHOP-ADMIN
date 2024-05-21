@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Languages";
+}
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.LanguageViewModel
+
+<h1>Lenguajes</h1>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Language</h2>
+        <ul>
+            @foreach (var language in Model.Language)
+            {
+                <li onclick="location.href='@Url.Action("EditarLanguage", "Languages", new { id = language.idLanguage })'">
+                    @language.idLanguage - @language.descripcion -  @language.iso
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager((IPagedList)Model.Language, pageLanguage => Url.Action("Languages", new { pageLanguage }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+    @using (Html.BeginForm("Guardar", "Languages", FormMethod.Post))
+    {
+        <div class="col-md-6">
+            <h2>Editar Language</h2>
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">IdLanguage</label>
+                    <div class="col-md-10">
+                        <input name="txtIdLanguage" readonly type="text" value="@(!string.IsNullOrEmpty(Model.idLanguage) ? Model.idLanguage : string.Empty)" class="form-control" placeholder="IdLanguage">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Descripción</label>
+                    <div class="col-md-10">
+                        <input name="txtDescripcion" type="text" value="@(!string.IsNullOrEmpty(Model.descripcion) ? Model.descripcion : string.Empty)" class="form-control" placeholder="Descripcion">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Iso</label>
+                    <div class="col-md-10">
+                        <input name="txtIso" type="text" value="@(!string.IsNullOrEmpty(Model.iso) ? Model.iso : string.Empty)" class="form-control" placeholder="Iso">
+                    </div>
+                </div>
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Añadir" class="btn btn-default">Añadir</button>
+                    <button type="submit" name="action" value="Guardar" class="btn btn-default">Editar</button>
+                    <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                </div>
+
+
+            </div>
+        </div>
+    }
+</div>
+@if(Model.Language.Count == 0)
+            {
+                <h1>HOla</h1>
+            }
+
+
+
+

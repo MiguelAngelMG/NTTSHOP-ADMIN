@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Nuevo Usuario";
+}
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.NewUserViewModel
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="row">
+    @using (Html.BeginForm("Guardar", "NewUser", FormMethod.Post))
+    {
+        <div class="col-md-6">
+            <h2>Nuevo Producto</h2>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Login</label>
+                    <div class="col-md-10">
+                        <input name="txtLogin" type="text" value="@(!string.IsNullOrEmpty(Model.user.login) ? Model.user.login : string.Empty)" class="form-control" placeholder="Login">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Password</label>
+                    <div class="col-md-10">
+                        <input name="txtPassword" type="password" value="@(!string.IsNullOrEmpty(Model.user.Password) ? Model.user.Password : string.Empty)" class="form-control" placeholder="password">
+                    </div>
+                </div><div class="form-group">
+                    <label class="control-label col-md-2">Nombre</label>
+                    <div class="col-md-10">
+                        <input name="txtNombre" type="text" value="@(!string.IsNullOrEmpty(Model.user.Name) ? Model.user.Name : string.Empty)" class="form-control" placeholder="Nombre">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Primer Apellido</label>
+                    <div class="col-md-10">
+                        <input name="txtApellido1" type="text" value="@(!string.IsNullOrEmpty(Model.user.Surname1) ? Model.user.Surname1 : string.Empty)" class="form-control" placeholder="Prier apellido">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">SegundoApellido</label>
+                    <div class="col-md-10">
+                        <input name="txtApellido2" type="text" value="@(!string.IsNullOrEmpty(Model.user.Surname1) ? Model.user.Surname2 : string.Empty)" class="form-control" placeholder="Segundo Apellido">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Languaje</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtLanguage", new SelectList(Model.languagesList, "iso", "descripcion"), new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Email</label>
+                    <div class="col-md-10">
+                        <input name="txtEmail" type="email" value="" class="form-control" placeholder="ejemplo@ejemplo.com">
+                    </div>
+                </div>
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Añadir" class="btn btn-default">Crear</button>
+                    <button type="submit" name="action" value="Cancelar" class="btn btn-default">Cancelar</button>
+                </div>
+
+
+            </div>
+        </div>
+    }
+</div>
+
+
+
+

@@ -1,0 +1,95 @@
+﻿using NTTShopAdmin.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace NTTShopAdmin.Controllers
+{
+    public class Ejemplo2Controller : Controller
+    {
+      
+        public ActionResult Index()
+        {
+            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            {
+                // Redirigir a la acción de inicio de sesión
+                return RedirectToAction("Login", "Login");
+            }
+            return View();
+        }
+
+        // GET: Ejemplo2/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        // GET: Ejemplo2/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Ejemplo2/Create
+        [HttpPost]
+        public ActionResult Create(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Ejemplo2/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: Ejemplo2/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Ejemplo2/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Ejemplo2/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
+}

@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Nuevo Producto";
+}
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.NewProductViewModel
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="row">
+    @using (Html.BeginForm("Guardar", "NewProduct", FormMethod.Post))
+    {
+        <div class="col-md-6">
+            <h2>Nuevo Producto</h2>
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Titulo</label>
+                    <div class="col-md-10">
+                        <input name="txtTitle"  type="text" value="" class="form-control" placeholder="Titulo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Descripción</label>
+                    <div class="col-md-10">
+                        <input name="txtDescripcion"  type="text" value="" class="form-control" placeholder="Descripcion">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">Languaje</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtLanguage", new SelectList(Model.languagesList, "iso", "descripcion"), new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Stock</label>
+                    <div class="col-md-10">
+                        <input name="txtStock" type="number" min="0" value="" class="form-control" placeholder="Stock">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Disponible</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtDisponible", new SelectList(new[]
+                         {
+                             new { Value = true, Text = "Verdadero" },
+                             new { Value = false, Text = "Falso" }
+                         }, "Value", "Text"), new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Precio</label>
+                    <div class="col-md-10">
+                        <input name="txtPrecio"  type="number" min="0" value="" class="form-control" placeholder="Precio">
+                    </div>
+                </div>
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Añadir" class="btn btn-default">Crear</button>
+                    <button type="submit" name="action" value="Cancelar" class="btn btn-default">Cancelar</button>
+                </div>
+
+
+            </div>
+        </div>
+    }
+</div>
+
+
+
+

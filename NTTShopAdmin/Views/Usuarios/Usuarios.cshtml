@@ -1,0 +1,104 @@
+﻿
+
+@using PagedList
+@using PagedList.Mvc
+@model NTTShopAdmin.Models.ViewModel.UsuariosViewModel
+
+<div class="row">
+    <div class="col-md-6">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        <h2>Usuarios de Gestión</h2>
+        <ul>
+            @foreach (var user in Model.ManagementUsers)
+            {
+                <li onclick="location.href='@Url.Action("EditarAdmin", "Usuarios", new { id = user.PkUser })'">
+                    @user.PkUser -  @user.Name  @user.Surname1 @user.Surname2 - @user.Email - @user.Languages   
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager(Model.ManagementUsers, pageManagement => Url.Action("Usuarios", new { pageManagement }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        <br />
+        <h2>Usuarios Normales</h2>
+        <ul>
+            @foreach (var user in Model.Users)
+            {
+                <li onclick="location.href='@Url.Action("EditarUsuario", "Usuarios", new { id = user.PkUser })'">
+                    @user.PkUser -  @user.Name  @user.Surname1 @user.Surname2 - @user.Email - @user.Phone - @user.Languages
+                </li>
+            }
+        </ul>
+        @Html.PagedListPager(Model.Users, pageUser => Url.Action("Usuarios", new { pageUser }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+    @using (Html.BeginForm("Guardar", "Usuarios", FormMethod.Post))
+    {
+        <div class="col-md-6">
+            <h2>Editar Usuario</h2>
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">IdUser</label>
+                    <div class="col-md-10">
+                        <input name="txtUser" readonly type="text" value="@(!string.IsNullOrEmpty(Model.UserId) ? Model.UserId : string.Empty)" class="form-control" placeholder="IdUser">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Nombre</label>
+                    <div class="col-md-10">
+                        <input name="txtNombre" type="text" value="@(!string.IsNullOrEmpty(Model.UserName) ? Model.UserName : string.Empty)" class="form-control" placeholder="Nombre">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Primer apellido</label>
+                    <div class="col-md-10">
+                        <input name="txtApellido1" type="text" value="@(!string.IsNullOrEmpty(Model.Surname1) ? Model.Surname1 : string.Empty)" class="form-control" placeholder="Primer Apellido">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Segundo apellido</label>
+                    <div class="col-md-10">
+                        <input name="txtApellido2" type="text" value="@(!string.IsNullOrEmpty(Model.Surname2) ? Model.Surname2 : string.Empty)" class="form-control" placeholder="Segundo apellido">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Teléfono</label>
+                    <div class="col-md-10">
+                        <input name="txtPhone" type="text" value="@(!string.IsNullOrEmpty(Model.UserPhone) ? Model.UserPhone : string.Empty)" class="form-control" placeholder="Teléfono">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Email</label>
+                    <div class="col-md-10">
+                        <input name="txtEmail" readonly type="text" value="@(!string.IsNullOrEmpty(Model.UserEmail) ? Model.UserEmail : string.Empty)" class="form-control" placeholder="Email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Idioma</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("txtIdioma", new SelectList(Model.languagesList, "iso", "descripcion", Model.UserIdioma), new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" name="action" value="Añadir" class="btn btn-default">Añadir</button>
+                    <button type="submit" name="action" value="Guardar" class="btn btn-default">Guardar</button>
+                    <button type="submit" name="action" value="Eliminar" class="btn btn-default">Borrar</button>
+                </div>
+           
+            
+            </div>
+        </div>
+    }
+    </div>
+
