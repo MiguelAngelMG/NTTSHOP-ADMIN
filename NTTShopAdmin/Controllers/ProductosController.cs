@@ -132,6 +132,10 @@ namespace NTTShopAdmin.Controllers
             {
                 ViewBag.ErrorMessageProduct = $"Error: Tienes que seleccionar un producto";
             }
+            if (action == "Añadir")
+            {
+                return RedirectToAction("NewProduct", "NewProduct");
+            }
 
             return View("Productos", modeloActual);
 

@@ -154,7 +154,7 @@ namespace NTTShopAdmin.Controllers
 
                     if (!model.DeleteLanguage(language.idLanguage))
                     {
-                        ViewBag.ErrorMessage = $"Error: No se ha podido eliminar el Language";
+                        MessageBox.Show("Error: No se puede eliminar el idioma, porque está en uso.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {

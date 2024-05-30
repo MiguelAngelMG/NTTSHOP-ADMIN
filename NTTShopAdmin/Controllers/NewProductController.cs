@@ -15,7 +15,7 @@ namespace NTTShopAdmin.Controllers
     public class NewProductController : Controller
     {
         ModelDAC model = new ModelDAC();
-        private NewUserViewModel modeloActual;
+        private NewProductViewModel modeloActual;
         public ActionResult NewProduct()
         {
             if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
@@ -24,7 +24,7 @@ namespace NTTShopAdmin.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
-            var viewModel = new NewUserViewModel();
+            var viewModel = new NewProductViewModel();
 
             viewModel.languagesList = model.GetAllLanguage().ToList();
             Session["modeloActual"] = viewModel;
@@ -38,7 +38,7 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Guardar(string action, string txtLanguage, string txtStock, string txtDisponible, string txtTitle, string txtDescripcion, string txtPrecio)
         {
-            modeloActual = (NewUserViewModel)Session["modeloActual"];
+            modeloActual = (NewProductViewModel)Session["modeloActual"];
 
             if (ValidarCampos(action, txtLanguage, txtStock,txtDisponible, txtTitle, txtDescripcion, txtPrecio))
             {
