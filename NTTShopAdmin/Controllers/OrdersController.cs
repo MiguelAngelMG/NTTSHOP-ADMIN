@@ -111,6 +111,7 @@ namespace NTTShopAdmin.Controllers
 
             return View("Orders", modeloActual);
         }
+
         [HttpPost]
         public ActionResult GuardarOrder(string action, string txtIdOrder, string txtDateOrder, string txtTitle, string txtDescription, string txtLanguage)
         {
@@ -130,9 +131,20 @@ namespace NTTShopAdmin.Controllers
                                 {
                                     if (order.idOrder == int.Parse(txtIdOrder))
                                     {
+                                        
                                         OrderStatus status = model.GetOrderStatus(int.Parse(txtLanguage));
                                         order.orderStatus = status.idStatus;
+
                                         order.status = status;
+                                        if (int.Parse(txtLanguage) == 2)
+                                        {
+                                            foreach(var producto in order.orderDetails)
+                                            {
+                                                var cantidad = producto.product.stock - producto.Units;
+                                                producto.product.stock = cantidad;
+                                                ActualizarProducto(producto);
+                                            }
+                                        }
 
                                     }
                                 }
@@ -213,7 +225,53 @@ namespace NTTShopAdmin.Controllers
 
             return View("Orders", modeloActual);
 
-        } 
+        }
+        private bool ActualizarProducto(Producto producto)
+        {
+            string error = "";
+            bool correcto = false;
+            var adminData = new { product = producto };
+
+            string jsonDatos = JsonConvert.SerializeObject(adminData);
+            string url = generalUrl + "Products/updateProduct";
+            try
+            {
+                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                httpRequest.Method = "PUT";
+                httpRequest.ContentType = "application/json";
+                httpRequest.Accept = "application/json";
+
+                using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+
+                    streamWriter.Write(jsonDatos);
+                }
+
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                HttpStatusCode httpStatus = httpResponse.StatusCode;
+
+                if (httpStatus == HttpStatusCode.OK)
+                {
+                    correcto = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("400")) //BadRequest
+                {
+                    error = "Algún dato está vacío o es nulo.";
+
+                }
+                else if (ex.Message.Contains("404")) //NotFound
+                {
+
+                    error = "Algún dato introducido ya existe o es inválido.";
+                }
+            }
+            return correcto;
+        }
     }
+   
 
 }
