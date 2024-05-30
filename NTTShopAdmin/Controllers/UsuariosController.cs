@@ -321,7 +321,6 @@ namespace NTTShopAdmin.Controllers
                             else
                             {
                                 MessageBox.Show("Se ha eliminado el usuario", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                             }
                             return RedirectToAction("Usuarios", "Usuarios");
                         }
