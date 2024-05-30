@@ -21,10 +21,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @if (Session["session-id"] != null) 
+                    {
                         <li>@Html.ActionLink("Usuarios", "Usuarios", "Usuarios")</li>
                         <li>@Html.ActionLink("Language", "Languages", "Languages")</li>
                         <li>@Html.ActionLink("Productos", "Productos", "Productos")</li>
                         <li>@Html.ActionLink("Orders", "Orders", "Orders")</li>
+                    }
                 </ul>
             </div>
         </div>
