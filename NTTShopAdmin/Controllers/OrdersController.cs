@@ -1,5 +1,6 @@
 ﻿using Antlr.Runtime.Misc;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using NTTShopAdmin.Entities;
 using NTTShopAdmin.Models;
 using NTTShopAdmin.Models.Entities;
@@ -123,34 +124,42 @@ namespace NTTShopAdmin.Controllers
                 {
                     if (action == "Editar")
                     {
+
                         if (model.GetOrder(int.Parse(txtIdOrder)) != null)
                         {
-                            if (model.updateOrderStatus(int.Parse(txtIdOrder), int.Parse(txtLanguage)))
+                            if (stockDisponible(model.GetOrder(int.Parse(txtIdOrder))))
                             {
-                                foreach (var order in modeloActual.allOrders)
+                                if (model.updateOrderStatus(int.Parse(txtIdOrder), int.Parse(txtLanguage)))
                                 {
-                                    if (order.idOrder == int.Parse(txtIdOrder))
+                                    foreach (var order in modeloActual.allOrders)
                                     {
-                                        
-                                        OrderStatus status = model.GetOrderStatus(int.Parse(txtLanguage));
-                                        order.orderStatus = status.idStatus;
-
-                                        order.status = status;
-                                        if (int.Parse(txtLanguage) == 2)
+                                        if (order.idOrder == int.Parse(txtIdOrder))
                                         {
-                                            foreach(var producto in order.orderDetails)
+
+                                            OrderStatus status = model.GetOrderStatus(int.Parse(txtLanguage));
+                                            order.orderStatus = status.idStatus;
+
+                                            order.status = status;
+                                            if (int.Parse(txtLanguage) == 2)
                                             {
-                                                var cantidad = producto.product.stock - producto.Units;
-                                                producto.product.stock = cantidad;
-                                                ActualizarProducto(producto);
+                                                foreach (var producto in order.orderDetails)
+                                                {
+                                                    var cantidad = producto.product.stock - producto.Units;
+                                                    producto.product.stock = cantidad;
+                                                    ActualizarProducto(producto.product);
+                                                }
                                             }
+
                                         }
-
                                     }
-                                }
-                                MessageBox.Show("Se ha actualizado el pedido", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MessageBox.Show("Se ha actualizado el pedido", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                modeloActual.orderPaged = modeloActual.allOrders.ToPagedList(1, 5);
+                                    modeloActual.orderPaged = modeloActual.allOrders.ToPagedList(1, 5);
+                                }
+                            }
+                            else { 
+                                    MessageBox.Show("Error: No se puede aceptar el pedido, debido que no hay stock de algunos productos.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                             }
                         }
 
@@ -226,50 +235,35 @@ namespace NTTShopAdmin.Controllers
             return View("Orders", modeloActual);
 
         }
-        private bool ActualizarProducto(Producto producto)
+        private bool ActualizarProducto(Product producto)
         {
-            string error = "";
-            bool correcto = false;
-            var adminData = new { product = producto };
+            bool estaActualizado = false;
 
-            string jsonDatos = JsonConvert.SerializeObject(adminData);
-            string url = generalUrl + "Products/updateProduct";
-            try
+            if (model.UpdateProduct(producto))
             {
-                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpRequest.Method = "PUT";
-                httpRequest.ContentType = "application/json";
-                httpRequest.Accept = "application/json";
-
-                using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
-                {
-
-                    streamWriter.Write(jsonDatos);
-                }
-
-                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-                HttpStatusCode httpStatus = httpResponse.StatusCode;
-
-                if (httpStatus == HttpStatusCode.OK)
-                {
-                    correcto = true;
-                }
-
+                estaActualizado = true;
             }
-            catch (Exception ex)
+            else
             {
-                if (ex.Message.Contains("400")) //BadRequest
+                MessageBox.Show("Error: No se ha podido actualizar", "Atención");
+            }
+            return estaActualizado;
+        }
+        private bool stockDisponible(Order order)
+        {
+            bool resultado = true;
+            if (order.orderStatus == 1)
+            {
+                foreach (var pedidos in order.orderDetails)
                 {
-                    error = "Algún dato está vacío o es nulo.";
-
-                }
-                else if (ex.Message.Contains("404")) //NotFound
-                {
-
-                    error = "Algún dato introducido ya existe o es inválido.";
+                    if (pedidos.Units > pedidos.product.stock)
+                    {
+                        resultado = false;
+                    }
                 }
             }
-            return correcto;
+        
+        return resultado;
         }
     }
    

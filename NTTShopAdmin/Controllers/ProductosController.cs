@@ -170,6 +170,7 @@ namespace NTTShopAdmin.Controllers
                             }
                             i++;
                         }
+                       
                         product.description[pos] = description;
                         if (!model.UpdateProduct(product))
                         {
