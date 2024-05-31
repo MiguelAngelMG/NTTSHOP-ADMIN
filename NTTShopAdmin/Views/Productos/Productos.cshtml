@@ -35,14 +35,14 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">IdProduct</label>
                     <div class="col-md-10">
-                        <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.product.idProduct.ToString()) ? Model.product.idProduct.ToString() : string.Empty)" class="form-control" placeholder="IdProduct">
+                        <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.product.idProduct.ToString()) ? Model.product.idProduct.ToString() : string.Empty)" class="form-control" placeholder="IdProduct" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-md-2">Stock</label>
                     <div class="col-md-10">
-                        <input name="txtStock" type="number" min="0" value="@(!string.IsNullOrEmpty(Model.product.stock.ToString()) ? Model.product.stock.ToString() : string.Empty)" class="form-control" placeholder="Stock">
+                        <input name="txtStock" type="number" min="0" value="@(!string.IsNullOrEmpty(Model.product.stock.ToString()) ? Model.product.stock.ToString() : string.Empty)" class="form-control" placeholder="Stock" required>
                     </div>
                 </div>
 
@@ -153,13 +153,13 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">IdDescripción</label>
                         <div class="col-md-10">
-                            <input name="txtIdDescription" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProductDescription.ToString()) ? Model.productDescription.idProductDescription.ToString() : string.Empty)" class="form-control" placeholder="Id Descripción">
+                            <input name="txtIdDescription" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProductDescription.ToString()) ? Model.productDescription.idProductDescription.ToString() : string.Empty)" class="form-control" placeholder="Id Descripción" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2">IdProduct</label>
                         <div class="col-md-10">
-                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProduct.ToString()) ? Model.productDescription.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product">
+                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.idProduct.ToString()) ? Model.productDescription.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product" required>
                         </div>
                     </div>
 
@@ -173,14 +173,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Titulo</label>
                         <div class="col-md-10">
-                            <input name="txtTitle" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.title) ? Model.productDescription.title : string.Empty)" class="form-control" placeholder="Titulo">
+                            <input name="txtTitle" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.title) ? Model.productDescription.title : string.Empty)" class="form-control" placeholder="Titulo" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Descripción</label>
                         <div class="col-md-10">
-                            <input name="txtDescription" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.description) ? Model.productDescription.description : string.Empty)" class="form-control" placeholder="Descripción">
+                            <input name="txtDescription" type="text" value="@(!string.IsNullOrEmpty(Model.productDescription.description) ? Model.productDescription.description : string.Empty)" class="form-control" placeholder="Descripción" required>
                         </div>
                     </div>
 
@@ -235,7 +235,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Id Producto</label>
                         <div class="col-md-10">
-                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productRates.idProduct.ToString()) ? Model.productRates.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product">
+                            <input name="txtIdProduct" readonly type="text" value="@(!string.IsNullOrEmpty(Model.productRates.idProduct.ToString()) ? Model.productRates.idProduct.ToString() : string.Empty)" class="form-control" placeholder="Id Product" >
                         </div>
                     </div>
 
