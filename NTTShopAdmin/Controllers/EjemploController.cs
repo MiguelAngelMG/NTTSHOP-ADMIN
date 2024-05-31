@@ -11,9 +11,8 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo
         public ActionResult Ejemplo()
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             return View();

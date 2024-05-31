@@ -19,9 +19,8 @@ namespace NTTShopAdmin.Controllers
         private ProductViewModel modeloActual;
         public ActionResult Productos(int? pageProduct, int? pageDescription, int? pageRates)
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             if (Session["modeloActual"] == null || !(Session["modeloActual"] is ProductViewModel))
@@ -70,6 +69,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult GuardarProducto(string action, string txtIdProduct, string txtStock, string txtDisponible, string txtTitle, string txtDescripcion, string txtPrecio)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (ProductViewModel)Session["modeloActual"];
             if (modeloActual.product != null && modeloActual.product.idProduct != 0)
             {
@@ -143,6 +146,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult GuardarDescription(string action, string txtIdDescription, string txtIdProduct, string txtLanguage, string txtTitle, string txtDescription)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (ProductViewModel)Session["modeloActual"];
 
             if (modeloActual.productDescription != null)
@@ -259,7 +266,12 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult GuardarRate(string action, string txtIdRate, string txtIdProduct, string txtPrecie)
             {
-                modeloActual = (ProductViewModel)Session["modeloActual"];
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            modeloActual = (ProductViewModel)Session["modeloActual"];
             if(modeloActual.productRates != null)
             {
                 if (!string.IsNullOrEmpty(txtIdProduct) && model.GetProduct(int.Parse(txtIdProduct)) != null)
@@ -411,6 +423,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult EditarProductos(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             Product product = model.GetProduct(id);
             modeloActual = (ProductViewModel)Session["modeloActual"];
             modeloActual.product = product;
@@ -429,6 +445,10 @@ namespace NTTShopAdmin.Controllers
         } 
         public ActionResult EditarDescripciones(int id, int description)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             Product product = model.GetProduct(id);
 
             modeloActual = (ProductViewModel)Session["modeloActual"];
@@ -446,6 +466,10 @@ namespace NTTShopAdmin.Controllers
         } 
         public ActionResult EditarRate(int id, int rate)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             Product product = model.GetProduct(id);
             modeloActual = (ProductViewModel)Session["modeloActual"];
             foreach (var des in product.rates)

@@ -19,9 +19,8 @@ namespace NTTShopAdmin.Controllers
         private LanguageViewModel modeloActual;
         public ActionResult Languages(int? pageLanguage)
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             var viewModel = new LanguageViewModel();
@@ -40,12 +39,20 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Details/5
         public ActionResult Details(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
         // GET: Ejemplo2/Create
         public ActionResult Create()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -55,8 +62,10 @@ namespace NTTShopAdmin.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
+                if (Session["session-id"] == null && Session["session-language"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
                 return RedirectToAction("Usuarios");
             }
             catch
@@ -68,6 +77,10 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Edit/5
         public ActionResult Edit(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -75,6 +88,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Edit(int id, System.Windows.Forms.FormCollection collection)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 // TODO: Add update logic here
@@ -90,6 +107,10 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Delete/5
         public ActionResult btnBorrar_Click()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -97,6 +118,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Delete(int id, System.Windows.Forms.FormCollection collection)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 // TODO: Add delete logic here
@@ -110,6 +135,10 @@ namespace NTTShopAdmin.Controllers
         }
         public ActionResult EditarLanguage(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             Language language = model.GetLanguage(id);
             modeloActual = (LanguageViewModel)Session["modeloActual"];
             modeloActual.idLanguage = language.idLanguage.ToString();
@@ -122,6 +151,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Guardar(string action, string txtIdLanguage, string txtDescripcion, string txtIso)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (LanguageViewModel)Session["modeloActual"];
 
             if (!string.IsNullOrEmpty(txtIdLanguage) && model.GetLanguage(int.Parse(txtIdLanguage)) != null)

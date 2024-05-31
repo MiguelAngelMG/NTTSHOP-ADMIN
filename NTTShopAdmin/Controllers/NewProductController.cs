@@ -18,9 +18,8 @@ namespace NTTShopAdmin.Controllers
         private NewProductViewModel modeloActual;
         public ActionResult NewProduct()
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
 
@@ -38,6 +37,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Guardar(string action, string txtLanguage, string txtStock, string txtDisponible, string txtTitle, string txtDescripcion, string txtPrecio)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (NewProductViewModel)Session["modeloActual"];
 
             if (ValidarCampos(action, txtLanguage, txtStock,txtDisponible, txtTitle, txtDescripcion, txtPrecio))
@@ -89,8 +92,11 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult GuardarDescription(string action, string txtIdDescription, string txtIdProduct, string txtLanguage, string txtTitle, string txtDescription)
         {
-        //    modeloActual = (ProductViewModel)Session["modeloActual"];
-
+            //    modeloActual = (ProductViewModel)Session["modeloActual"];
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (!string.IsNullOrEmpty(txtIdProduct) && model.GetProduct(int.Parse(txtIdProduct)) != null)
             {
                 if (action == "Guardar")
