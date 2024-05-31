@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Web.UI;
 using NTTShopAdmin.Entities;
 using NTTShopAdmin.Models;
+using NTTShopAdmin.Models.Entities;
 
 
 namespace NTTShopAdmin.Controllers
@@ -26,8 +27,8 @@ namespace NTTShopAdmin.Controllers
         //}
         public ActionResult Login()
         {
-            Session["session-compra"] = "";
-            Session["session-language"] = "";
+            Session["session-id"] = null;
+            Session["session-language"] = null;
             return View();
         }
 
@@ -65,6 +66,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult UserDashBoard()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (Session["UserID"] != null)
             {
                 return View();
@@ -77,6 +82,7 @@ namespace NTTShopAdmin.Controllers
 
         public bool LoginUser(string user, string password)
         {
+
             bool existeUsuario = false;
 
             try
@@ -123,6 +129,10 @@ namespace NTTShopAdmin.Controllers
 
             return existeUsuario;
         }
-
+        public ActionResult CerrarSesion()
+        {
+         return RedirectToAction("Login", "Login");
+           
+        }
     }
 }

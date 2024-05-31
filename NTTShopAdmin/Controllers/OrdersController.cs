@@ -23,9 +23,8 @@ namespace NTTShopAdmin.Controllers
         private OrdersViewModel modeloActual;
         public ActionResult Orders(int? pageOrder, int? pageDetail)
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             if (Session["modeloActual"] == null || !(Session["modeloActual"] is OrdersViewModel))
@@ -70,6 +69,11 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Buscar(string action, string txtnombre, DateTime? desdeDateInput, DateTime? hastaDateinput, int txtEstado)
         {
+
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (action == "Buscar")
             {
 
@@ -116,6 +120,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult GuardarOrder(string action, string txtIdOrder, string txtDateOrder, string txtTitle, string txtDescription, string txtLanguage)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (OrdersViewModel)Session["modeloActual"];
 
             if (modeloActual.orderDetail != null)
@@ -212,6 +220,10 @@ namespace NTTShopAdmin.Controllers
       
         public ActionResult EditarOrder(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             Order order = model.GetOrder(id);
             modeloActual = (OrdersViewModel)Session["modeloActual"];
             modeloActual.order = order;
@@ -230,7 +242,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult EditarDescripciones(int id)
         {
-
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
 
             return View("Orders", modeloActual);
 

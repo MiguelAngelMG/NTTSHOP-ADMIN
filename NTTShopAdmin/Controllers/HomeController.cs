@@ -10,9 +10,8 @@ namespace NTTShopAdmin.Controllers
     {
         public ActionResult Index()
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             return View();
@@ -20,6 +19,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult About()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             ViewBag.Message = "Your application description page.";
 
             return View();
@@ -27,6 +30,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult Contact()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             ViewBag.Message = "Your contact page.";
 
             return View();

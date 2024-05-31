@@ -20,9 +20,8 @@ namespace NTTShopAdmin.Controllers
         private NewUserViewModel modeloActual;
         public ActionResult NewUser()
         {
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
 
@@ -40,6 +39,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Guardar(string action, string txtLanguage, string txtEmail, string txtApellido2, string txtApellido1, string txtPassword, string txtLogin, string txtNombre)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (action == "Cancelar")
             {
 

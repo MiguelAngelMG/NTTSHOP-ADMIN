@@ -28,9 +28,8 @@ namespace NTTShopAdmin.Controllers
         public ActionResult Usuarios(int? pageManagement, int? pageUser)
         {
 
-            if (Session["session-id"] == null || string.IsNullOrWhiteSpace(Session["session-id"].ToString()))
+            if (Session["session-id"] == null && Session["session-language"] == null)
             {
-                // Redirigir a la acción de inicio de sesión
                 return RedirectToAction("Login", "Login");
             }
             var viewModel = new UsuariosViewModel();
@@ -51,12 +50,20 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Details/5
         public ActionResult Details(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
         // GET: Ejemplo2/Create
         public ActionResult Create()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -64,6 +71,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Create(System.Windows.Forms.FormCollection collection)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 // TODO: Add insert logic here
@@ -79,6 +90,10 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Edit/5
         public ActionResult EditarAdmin(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             ManagementUser user = model.GetUserManagm(id);
             modeloActual = (UsuariosViewModel)Session["modeloActual"];
             modeloActual.UserId = user.PkUser.ToString();
@@ -95,6 +110,10 @@ namespace NTTShopAdmin.Controllers
 
         public ActionResult EditarUsuario(int id)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             User user = model.GetUser(id);
             modeloActual = (UsuariosViewModel)Session["modeloActual"];
             modeloActual.UserId = user.PkUser.ToString();
@@ -113,6 +132,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Edit(int id, System.Windows.Forms.FormCollection collection)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 // TODO: Add update logic here
@@ -128,6 +151,10 @@ namespace NTTShopAdmin.Controllers
         // GET: Ejemplo2/Delete/5
         public ActionResult btnBorrar_Click()
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -135,6 +162,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Delete(int id, System.Windows.Forms.FormCollection collection)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 // TODO: Add delete logic here
@@ -150,6 +181,10 @@ namespace NTTShopAdmin.Controllers
         [HttpPost]
         public ActionResult Guardar(string action, string txtUser, string txtNombre, string txtApellido1, string txtApellido2, string txtPhone, string txtEmail, string txtIdioma)
         {
+            if (Session["session-id"] == null && Session["session-language"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             modeloActual = (UsuariosViewModel)Session["modeloActual"];
 
             if (action == "Añadir")
